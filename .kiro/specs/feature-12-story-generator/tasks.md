@@ -1,0 +1,89 @@
+# Implementation Plan
+
+- [x] 1. Implement prompt builder for story generator
+  - [x] 1.1 Add build-story-generator-prompt function to prompt-builder.lisp
+    - Implement style-specific instructions (gothic, parody, classic)
+    - Format user inputs (name, elements)
+    - Add language-specific instructions
+    - Set appropriate story length guidance
+    - _Requirements: 1.3, 1.5_
+  - [x] 1.2 Add validate-story-style function to validation.lisp
+    - Validate style is one of: gothic, parody, classic
+    - _Requirements: 1.2_
+  - [x] 1.3 Write unit tests for prompt builder
+    - Test each story style produces correct prompt
+    - Test Japanese and English language outputs
+    - Verify style-specific instructions are included
+    - _Requirements: 1.3, 1.5_
+
+- [x] 2. Implement API endpoint
+  - [x] 2.1 Add story-generator endpoint to halloween-api.lisp
+    - Parse form data from request
+    - Validate inputs (name, style, elements, language)
+    - Call prompt builder with style parameter
+    - Call LLM service with higher max tokens for longer stories
+    - Format response as HTML with prose styling
+    - Handle errors
+    - _Requirements: 1.1, 1.3, 1.4_
+  - [x] 2.2 Write unit tests for API endpoint
+    - Test with valid requests for each style
+    - Test with invalid style parameter
+    - Test with missing parameters
+    - Test error handling
+    - _Requirements: 1.1, 1.2, 1.3_
+
+- [x] 3. Implement frontend component
+  - [x] 3.1 Create Story Generator component in index.html
+    - Create form with DaisyUI components
+    - Add name input field
+    - Add story elements textarea
+    - Add style selector (dropdown or radio buttons)
+    - Add generate button with Halloween styling
+    - _Requirements: 1.1, 1.2_
+  - [x] 3.2 Wire up HTMX attributes
+    - Add hx-post="/api/story-generator"
+    - Add hx-target for story display
+    - Add hx-swap="innerHTML"
+    - Add hx-indicator for loading state
+    - Include language parameter in request
+    - _Requirements: 1.1, 1.3_
+  - [x] 3.3 Create story display area
+    - Use DaisyUI card component
+    - Apply prose styling for readable narrative
+    - Style for dark mode with Halloween colors
+    - Format title prominently
+    - _Requirements: 1.4_
+
+- [x] 4. Testing and refinement
+  - [x] 4.1 Manual testing
+    - Test each story style (gothic, parody, classic)
+    - Test with various names and elements
+    - Test in Japanese and English
+    - Verify style differences are clear
+    - Check story quality and length
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 4.2 Write E2E tests
+    - Create story-generator.spec.js
+    - Test story generation for each style
+    - Test language switching
+    - Test error handling
+    - Test input validation
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 4.3 Optimize prompts based on testing
+    - Refine style-specific instructions
+    - Adjust story length and pacing
+    - Improve narrative quality
+    - _Requirements: 1.4, 1.5_
+
+- [x] 5. Fix radio button visibility
+  - [x] 5.1 Add CSS styling for radio buttons
+    - Add light-colored borders for visibility on dark backgrounds
+    - Style checked state with primary color
+    - Add hover state for better UX
+    - Ensure consistent styling across all radio buttons
+    - _Requirements: 2.1, 2.2, 2.3, 2.4_
+  - [x] 5.2 Test radio button visibility
+    - Verify radio buttons are visible on dark background
+    - Check selected vs unselected states are distinguishable
+    - Test hover interactions
+    - _Requirements: 2.1, 2.3_

@@ -1,0 +1,87 @@
+# Implementation Plan
+
+- [x] 1. Implement prompt builder for trivia bot
+  - [x] 1.1 Add build-trivia-bot-prompt function to prompt-builder.lisp
+    - Include trivia expert system instructions
+    - Require at least one Halloween fact in response
+    - Specify diverse trivia topics
+    - Add language-specific instructions
+    - Format for conversational + educational tone
+    - _Requirements: 1.1, 1.2, 1.4_
+  - [x] 1.2 Write unit tests for prompt builder
+    - Test prompt includes trivia instructions
+    - Test Japanese and English language outputs
+    - Verify trivia topics are mentioned
+    - _Requirements: 1.1, 1.2_
+
+- [x] 2. Implement API endpoint
+  - [x] 2.1 Add trivia-bot endpoint to halloween-api.lisp
+    - Parse form data from request
+    - Validate inputs (message, language)
+    - Call prompt builder
+    - Call LLM service
+    - Parse response to identify trivia facts
+    - Format response with highlighted trivia
+    - Handle errors
+    - _Requirements: 1.1, 1.2, 1.3_
+  - [x] 2.2 Write unit tests for API endpoint
+    - Test with valid requests
+    - Test with missing parameters
+    - Test response formatting
+    - Test error handling
+    - _Requirements: 1.1, 1.2, 1.3_
+
+- [x] 3. Implement frontend component
+  - [x] 3.1 Create Trivia Bot component in index.html
+    - Create conversation input textarea
+    - Add send button with Halloween styling
+    - Create response display area
+    - _Requirements: 1.1_
+  - [x] 3.2 Wire up HTMX attributes
+    - Add hx-post="/api/trivia-bot"
+    - Add hx-target for response display
+    - Add hx-swap="beforeend" to append responses
+    - Add hx-indicator for loading state
+    - Include language parameter in request
+    - _Requirements: 1.1, 1.2_
+  - [x] 3.3 Style trivia display
+    - Use DaisyUI alert or badge for trivia facts
+    - Add "Did you know?" prefix
+    - Use distinct color (orange/purple accent)
+    - Add icon for visual interest
+    - Style for dark mode
+    - _Requirements: 1.3_
+
+- [x] 4. Testing and refinement
+  - [x] 4.1 Manual testing
+    - Test various conversation topics
+    - Test in Japanese and English
+    - Verify trivia facts are included
+    - Check trivia diversity (different topics)
+    - Test follow-up questions about trivia
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 4.2 Write E2E tests
+    - Create trivia-bot.spec.js
+    - Test conversation flow
+    - Test trivia fact display
+    - Test language switching
+    - Test error handling
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 4.3 Optimize prompts based on testing
+    - Refine trivia inclusion instructions
+    - Improve trivia diversity
+    - Adjust conversational tone
+    - _Requirements: 1.2, 1.4_
+
+- [x] 5. Fix text visibility in trivia bot responses
+  - [x] 5.1 Add CSS styling for chat bubble variants
+    - Add `.chat-bubble-accent` class with light text color
+    - Add `.chat-bubble-secondary` class with light text color
+    - Ensure white text on dark backgrounds for readability
+    - Apply consistent styling across all chat bubble types
+    - _Requirements: 2.1, 2.2, 2.3, 2.4_
+  - [x] 5.2 Test text visibility
+    - Verify trivia bot responses are readable
+    - Check character chat responses are readable
+    - Test in dark theme mode
+    - _Requirements: 2.1, 2.2, 2.4_

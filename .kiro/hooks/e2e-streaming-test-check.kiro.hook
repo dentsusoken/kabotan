@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "E2E Streaming Test Verification",
+  "description": "Automatically runs streaming E2E tests when HTML or JS files are modified and task is completed",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "public/**/*.html",
+      "public/**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "HTML or JavaScript files have been modified. Before completing this task, you MUST run 'make test-e2e-streaming' to verify streaming functionality. This test runs streaming tests only and should complete in approximately 13 minutes. Note: Some streaming tests may fail due to Playwright limitations with SSE, which is expected. Do not mark the work as complete until you have run the streaming tests."
+  }
+}

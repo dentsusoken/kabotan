@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ja" data-lang="ja" data-theme="halloween">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kabotan - Halloween Features</title>
+    
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- DaisyUI via CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    
+    <!-- HTMX via CDN -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- HTMX SSE Extension -->
+    <script src="https://unpkg.com/htmx.org@1.9.10/dist/ext/sse.js"></script>
+    
+    <!-- HTMX Response Targets Extension -->
+    <script src="https://unpkg.com/htmx.org@1.9.10/dist/ext/response-targets.js"></script>
+    
+    <!-- HTMX Configuration -->
+    <meta name="htmx-config" content='{"timeout":360000}'>
+    
+    <!-- Custom Halloween Theme Styles -->
+    <link rel="stylesheet" href="/static/custom-styles.css?v=20241115">
+    
+    <!-- JavaScript Modules -->
+    <script src="/static/js/language-manager.js?v=20241119"></script>
+    <script src="/static/js/page-init.js?v=20241119"></script>
+    <script src="/static/js/streaming-handler.js?v=20241119"></script>
+    
+    <style>
+        :root {
+            --halloween-orange: #ff6b35;
+            --halloween-purple: #8b5cf6;
+            --halloween-black: #1a1a1a;
+        }
+        
+        [data-theme="halloween"] {
+            --p: 262 80% 50%;        /* Primary color (purple) */
+            --s: 17 100% 60%;         /* Secondary color (orange) */
+            --a: 17 100% 60%;         /* Accent color (orange) */
+            --n: 0 0% 10%;            /* Neutral color (dark) */
+            --nc: 0 0% 100%;          /* Neutral content (white text) */
+            --b1: 0 0% 10%;           /* Base-100 (background) */
+            --b2: 0 0% 8%;            /* Base-200 (slightly darker) */
+            --b3: 0 0% 6%;            /* Base-300 (even darker) */
+            --bc: 0 0% 90%;           /* Base content (light text) */
+            --pc: 0 0% 100%;          /* Primary content (white) */
+            --sc: 0 0% 100%;          /* Secondary content (white) */
+            --ac: 0 0% 100%;          /* Accent content (white) */
+        }
+        
+        body {
+            background-color: var(--halloween-black);
+            color: #e5e5e5;
+        }
+        
+        .halloween-gradient {
+            background: linear-gradient(135deg, var(--halloween-purple) 0%, var(--halloween-orange) 100%);
+        }
+        
+        .htmx-indicator {
+            display: none !important;
+            opacity: 0 !important;
+        }
+        
+        .htmx-request .htmx-indicator,
+        .htmx-indicator.htmx-request {
+            display: inline-block !important;
+            opacity: 1 !important;
+        }
+        
+        .htmx-request button[type="submit"],
+        form:has(.htmx-indicator.htmx-request) button[type="submit"] {
+            opacity: 0.7 !important;
+            pointer-events: none;
+            cursor: not-allowed;
+        }
+        
+        .htmx-request input,
+        .htmx-request textarea,
+        .htmx-request select,
+        form:has(.htmx-indicator.htmx-request) input,
+        form:has(.htmx-indicator.htmx-request) textarea,
+        form:has(.htmx-indicator.htmx-request) select {
+            pointer-events: none;
+        }
+        
+        /* Daily Spell Styling */
+        .spell-phrase {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1.3;
+            background: linear-gradient(135deg, var(--halloween-purple) 0%, var(--halloween-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: 1.5rem 0;
+            font-family: 'Georgia', serif;
+            letter-spacing: 0.02em;
+        }
+        
+        .spell-date {
+            font-size: 0.875rem;
+            opacity: 0.7;
+            text-align: center;
+        }
+        
+        .spell-explanation {
+            font-size: 1rem;
+            line-height: 1.6;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Mobile Responsive Improvements */
+        @media (max-width: 768px) {
+            /* Tabs - horizontal scroll on mobile */
+            .tabs-boxed {
+                overflow-x: auto;
+                overflow-y: hidden;
+                flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+            }
+            
+            .tab {
+                flex-shrink: 0;
+                min-width: fit-content;
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            /* Larger touch targets for buttons */
+            .btn {
+                min-height: 3rem;
+                padding: 0.75rem 1.5rem;
+            }
+            
+            /* Input fields - larger for mobile */
+            .input,
+            .textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+                min-height: 3rem;
+            }
+            
+            .textarea {
+                min-height: 5rem;
+            }
+            
+            /* Radio buttons and labels - larger touch targets */
+            .label.cursor-pointer {
+                padding: 1rem;
+                min-height: 3.5rem;
+            }
+            
+            .radio {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+            
+            /* Chat/Trivia containers - adjust height for mobile */
+            #chat-messages,
+            #trivia-messages {
+                height: 50vh;
+                max-height: 400px;
+            }
+            
+            /* Card body padding */
+            .card-body {
+                padding: 1rem;
+            }
+            
+            /* Spell phrase - smaller on mobile */
+            .spell-phrase {
+                font-size: 1.5rem;
+            }
+            
+            /* Header - compact on mobile */
+            .navbar {
+                padding: 0.5rem 1rem;
+            }
+            
+            .navbar .btn-ghost {
+                font-size: 1.25rem;
+            }
+            
+            /* Language toggle - more compact */
+            .swap {
+                font-size: 0.875rem;
+            }
+            
+            /* Main container - reduce padding */
+            main.container {
+                padding: 1rem;
+            }
+            
+            /* Card title - smaller on mobile */
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            /* Form spacing - tighter on mobile */
+            .space-y-4 > * + * {
+                margin-top: 0.75rem;
+            }
+            
+            /* Character selector - stack vertically on small screens */
+            .form-control .flex.flex-wrap.gap-4 {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .form-control .flex.flex-wrap.gap-4 .label.cursor-pointer {
+                width: 100%;
+            }
+        }
+        
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .tab {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.75rem;
+            }
+            
+            .card-title {
+                font-size: 1.25rem;
+            }
+            
+            .spell-phrase {
+                font-size: 1.25rem;
+            }
+            
+            /* Stack buttons vertically on very small screens */
+            .flex.gap-2 {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .flex.gap-2 .btn {
+                width: 100%;
+            }
+        }
+        
+        /* Landscape mobile - adjust chat height */
+        @media (max-width: 768px) and (orientation: landscape) {
+            #chat-messages,
+            #trivia-messages {
+                height: 40vh;
+                max-height: 300px;
+            }
+        }
+        
+        /* Streaming UI Styles */
+        .streaming-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(255, 107, 53, 0.2) 100%);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 1rem;
+        }
+        
+        .streaming-indicator.active {
+            display: flex;
+        }
+        
+        .streaming-indicator .loading {
+            color: var(--halloween-purple);
+        }
+        
+        .streaming-indicator .streaming-text {
+            flex: 1;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+        
+        .streaming-indicator .btn-stop {
+            min-height: 2rem;
+            height: 2rem;
+            padding: 0 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .streaming-content {
+            min-height: 3rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 0.5rem;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.6;
+        }
+        
+        .streaming-content:empty::before {
+            content: attr(data-placeholder);
+            opacity: 0.5;
+            font-style: italic;
+        }
+        
+        .streaming-response-container {
+            display: none;
+        }
+        
+        .streaming-response-container.active {
+            display: block;
+        }
+        
+        /* Streaming animation */
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 15px rgba(139, 92, 246, 0.6);
+            }
+        }
+        
+        .streaming-indicator.active {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        /* Chat Bubble Styling - Fix text visibility */
+        .chat-bubble-primary {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c61 100%) !important;
+            color: white !important;
+        }
+        
+        .chat-bubble-secondary {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%) !important;
+            color: white !important;
+        }
+        
+        .chat-bubble-accent {
+            background: linear-gradient(135deg, #6d28d9 0%, #8b5cf6 100%) !important;
+            color: white !important;
+        }
+        
+        /* Radio Button Styling - Fix visibility on dark background */
+        .radio {
+            border-width: 2px !important;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+            background-color: transparent !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+        }
+        
+        .radio:checked {
+            border-color: #8b5cf6 !important;
+            background-color: #8b5cf6 !important;
+            background-image: radial-gradient(circle, white 40%, transparent 50%) !important;
+        }
+        
+        .radio:hover {
+            border-color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .radio-primary:checked {
+            border-color: #8b5cf6 !important;
+            background-color: #8b5cf6 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen" hx-ext="sse,response-targets">
+    <!-- Header with Language Toggle -->
+    <header class="navbar bg-base-200 shadow-lg">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl halloween-gradient bg-clip-text text-transparent font-bold">
+                🎃 Kabotan
+            </a>
+        </div>
+        <div class="flex-none">
+            <label class="swap swap-rotate">
+                <input type="checkbox" id="language-toggle" />
+                <div class="swap-on text-lg font-semibold">日本語</div>
+                <div class="swap-off text-lg font-semibold">English</div>
+            </label>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-8">
+        <!-- Global Streaming Indicator -->
+        <div id="streaming-indicator" class="streaming-indicator" data-streaming-enabled="true" data-streaming-timeout="360" data-streaming-update-interval="100">
+            <span class="loading loading-dots loading-sm"></span>
+            <span class="streaming-text">
+                <span data-i18n="streaming-generating">Generating response...</span>
+            </span>
+            <button class="btn btn-sm btn-ghost btn-stop" onclick="stopStreaming()" type="button">
+                <span data-i18n="streaming-stop">Stop</span>
+            </button>
+        </div>
+
+        <!-- Feature Mode Navigation Tabs -->
+        <div role="tablist" class="tabs tabs-boxed bg-base-200 mb-6 md:mb-8 flex-wrap md:justify-center">
+            <a role="tab" class="tab" data-feature="monster-diagnostic" 
+               hx-get="/api/features/monster-diagnostic" 
+               hx-target="#feature-content" 
+               hx-swap="innerHTML">
+                <span data-i18n="tab-monster">👹 Monster Diagnostic</span>
+            </a>
+            <a role="tab" class="tab" data-feature="story-generator" 
+               hx-get="/api/features/story-generator" 
+               hx-target="#feature-content" 
+               hx-swap="innerHTML">
+                <span data-i18n="tab-story">📖 Story Generator</span>
+            </a>
+            <a role="tab" class="tab" data-feature="character-chat" 
+               hx-get="/api/features/character-chat" 
+               hx-target="#feature-content" 
+               hx-swap="innerHTML">
+                <span data-i18n="tab-chat">💬 Character Chat</span>
+            </a>
+            <a role="tab" class="tab" data-feature="trivia-bot" 
+               hx-get="/api/features/trivia-bot" 
+               hx-target="#feature-content" 
+               hx-swap="innerHTML">
+                <span data-i18n="tab-trivia">🎓 Trivia Bot</span>
+            </a>
+            <a role="tab" class="tab" data-feature="spell-generator" 
+               hx-get="/api/features/spell-generator" 
+               hx-target="#feature-content" 
+               hx-swap="innerHTML">
+                <span data-i18n="tab-spell">✨ Spell Generator</span>
+            </a>
+        </div>
+
+        <!-- Dynamic Content Container -->
+        <div id="feature-content">
+            <!-- Feature content will be loaded here via HTMX -->
+        </div>
+        
+        <!-- Global Error Display Container -->
+        <div id="error-display" class="mt-4">
+            <!-- Error messages will be displayed here -->
+        </div>
+    </main>
+
+    <!-- Streaming Response Templates (hidden, used by JavaScript) -->
+    <template id="streaming-response-template">
+        <div class="streaming-response-container" data-feature="">
+            <div class="streaming-content" data-placeholder="Waiting for response..."></div>
+        </div>
+    </template>
+
+    <!-- Footer -->
+    <footer class="footer footer-center p-4 bg-base-200 text-base-content mt-4 md:mt-8">
+        <aside>
+            <p class="text-sm md:text-base">🎃 Kabotan</p>
+        </aside>
+    </footer>
+</body>
+</html>

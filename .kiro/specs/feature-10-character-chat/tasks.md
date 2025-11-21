@@ -1,0 +1,102 @@
+# Implementation Plan
+
+- [x] 1. Implement prompt builder for character chat
+  - [x] 1.1 Add build-character-chat-prompt function to prompt-builder.lisp
+    - Implement character persona definitions (Dracula, Witch, Jack-o'-Lantern)
+    - Include character-specific speaking styles
+    - Format user message and optional history
+    - Add language-specific instructions
+    - _Requirements: 1.2, 1.3_
+  - [x] 1.2 Add validate-character function to validation.lisp
+    - Validate character is one of: dracula, witch, jack
+    - _Requirements: 1.1_
+  - [x] 1.3 Write unit tests for prompt builder
+    - Test each character produces correct persona
+    - Test with and without history
+    - Test Japanese and English language outputs
+    - Verify character-specific traits are included
+    - _Requirements: 1.2, 1.3_
+
+- [x] 2. Implement API endpoint
+  - [x] 2.1 Add character-chat endpoint to halloween-api.lisp
+    - Parse form data from request
+    - Validate inputs (character, message, language)
+    - Parse optional history parameter
+    - Call prompt builder with character and history
+    - Call LLM service
+    - Format response as chat bubble HTML
+    - Handle errors
+    - _Requirements: 1.1, 1.3, 1.4_
+  - [x] 2.2 Write unit tests for API endpoint
+    - Test with valid requests for each character
+    - Test with invalid character parameter
+    - Test with missing parameters
+    - Test with chat history
+    - Test error handling
+    - _Requirements: 1.1, 1.2, 1.3_
+
+- [x] 3. Implement frontend component
+  - [x] 3.1 Create Character Chat component in index.html
+    - Create character selector with DaisyUI radio buttons or tabs
+    - Add character options: Dracula, Witch, Jack-o'-Lantern
+    - Add character icons/avatars
+    - Create chat history display area
+    - Add message input textarea
+    - Add send button with Halloween styling
+    - _Requirements: 1.1, 1.2_
+  - [x] 3.2 Wire up HTMX attributes
+    - Add hx-post="/api/character-chat"
+    - Add hx-target for chat history
+    - Add hx-swap="beforeend" to append messages
+    - Add hx-indicator for loading state
+    - Include selected character in request
+    - Include language parameter in request
+    - _Requirements: 1.1, 1.3_
+  - [x] 3.3 Implement chat display
+    - Use DaisyUI chat bubble components
+    - Alternate user and character messages
+    - Show character avatar/icon
+    - Style for dark mode with Halloween colors
+    - Display character name in header
+    - _Requirements: 1.4_
+  - [x] 3.4 Add chat history management
+    - Store chat messages in DOM
+    - Clear chat when switching characters
+    - Optionally send history to backend for context
+    - _Requirements: 1.5_
+
+- [x] 4. Testing and refinement
+  - [x] 4.1 Manual testing
+    - Test conversation with each character
+    - Test multiple message exchanges
+    - Test character switching
+    - Test in Japanese and English
+    - Verify character personalities are distinct
+    - Check response quality
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 4.2 Write E2E tests
+    - Create character-chat.spec.js
+    - Test chat with each character
+    - Test multiple exchanges
+    - Test character switching
+    - Test language switching
+    - Test error handling
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 4.3 Optimize prompts based on testing
+    - Refine character personas
+    - Adjust speaking styles
+    - Improve character consistency
+    - _Requirements: 1.2, 1.3, 1.5_
+
+- [x] 5. Fix radio button visibility
+  - [x] 5.1 Add CSS styling for radio buttons
+    - Add light-colored borders for visibility on dark backgrounds
+    - Style checked state with primary color
+    - Add hover state for better UX
+    - Ensure consistent styling across all radio buttons
+    - _Requirements: 2.1, 2.2, 2.3, 2.4_
+  - [x] 5.2 Test radio button visibility
+    - Verify radio buttons are visible on dark background
+    - Check selected vs unselected states are distinguishable
+    - Test hover interactions
+    - _Requirements: 2.1, 2.3_

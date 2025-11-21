@@ -1,0 +1,18 @@
+{
+  "enabled": true,
+  "name": "Pre-Completion Test Verification",
+  "description": "Automatically reminds to run 'make test' before marking any task as complete to ensure all tests pass",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "src/**/*.lisp",
+      "tests/**/*.lisp",
+      "*.asd"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Before completing this task, you MUST run 'make test' to verify all tests pass. Do not mark the work as complete until you have confirmed that the test suite runs successfully without errors. This is a critical requirement for all code changes."
+  }
+}

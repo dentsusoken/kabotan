@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "E2E UI Test Verification",
+  "description": "Automatically runs UI E2E tests (excluding INTEGRATION and streaming) when HTML or JS files are modified and task is completed",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "public/**/*.html",
+      "public/**/*.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "HTML or JavaScript files have been modified. Before completing this task, you MUST run 'make test-e2e-ui' to verify UI functionality. This test excludes INTEGRATION and streaming tests and should complete in 3-5 minutes. Do not mark the work as complete until you have confirmed that the E2E UI tests pass successfully."
+  }
+}

@@ -1,0 +1,193 @@
+# Implementation Plan
+
+- [x] 1. Set up project structure and update ASDF system definition
+  - Create directory structure for api/, services/, and utils/ under src/
+  - Update kabotan.asd to include new source files in correct load order
+  - Update package.lisp to export necessary symbols
+  - _Requirements: All requirements depend on proper project structure_
+
+- [x] 2. Implement environment-based configuration
+  - [x] 2.1 Configure LLM service to read from environment variables
+    - Use OPENAI_API_KEY, OPENAI_MODEL, and OPENAI_HOST directly in llm-service
+    - Provide sensible defaults for development
+    - _Requirements: Implementation Notes - Environment Configuration_
+  - [x] 2.2 Removed setup-openai-api-setting function (no longer needed)
+    - LLM service now reads environment variables directly
+    - Removed openai package dependency
+    - _Requirements: Implementation Notes - Environment Configuration_
+
+- [x] 3. Implement utilities layer
+  - [x] 3.1 Create validation.lisp with input validation functions
+    - Implement validate-language, validate-non-empty-string, validate-story-style, validate-character
+    - Implement sanitize-input for security
+    - _Requirements: 9.1, 9.3_
+  - [x] 3.2 Create error-handling.lisp with error handling utilities
+    - Implement handle-api-error, format-error-response, log-error
+    - _Requirements: 9.2, 9.4, 9.5_
+  - [x] 3.3 Create response-formatting.lisp with HTML response formatters
+    - Implement format-html-response and feature-specific formatters
+    - Use DaisyUI classes for styling
+    - _Requirements: 8.4_
+  - [x] 3.4 Write unit tests for utilities
+    - Test validation functions with valid and invalid inputs
+    - Test error formatting produces correct HTML
+    - Test response formatters produce valid DaisyUI HTML
+    - _Requirements: 9.1, 9.3_
+
+- [x] 4. Implement service layer
+  - [x] 4.1 Implement llm-service.lisp with LLM interaction functions
+    - [x] Implement call-llm function with timeout handling using dexador HTTP client
+    - [x] Implement call-llm-with-retry with exponential backoff and error handling
+    - _Requirements: 1.2, 1.3, 9.4_
+  - [x] 4.2 Implement language-handler.lisp with language management
+    - Define *ui-texts* parameter with Japanese and English text for all UI elements
+    - Implement get-ui-text function to retrieve translations
+    - Implement detect-browser-language function to parse Accept-Language header
+    - _Requirements: 2.1, 2.2, 2.5_
+  - [x] 4.3 Implement prompt-builder.lisp with prompt construction functions
+    - Implement build-monster-diagnostic-prompt with personality analysis instructions
+    - Implement build-story-generator-prompt with style-specific instructions
+    - Implement build-character-chat-prompt with character persona context
+    - Implement build-trivia-bot-prompt with trivia inclusion instructions
+    - Implement build-spell-generator-prompt for on-demand spell generation
+    - _Requirements: 1.1, 2.3, 2.4, 3.2, 4.3, 5.3, 6.2, 7.2_
+  - [x] 4.4 Write unit tests for service layer
+    - Test prompt builders produce correct format for each feature
+    - Test language handler returns correct text
+    - Test LLM service with mocked API function
+    - _Requirements: 1.1, 2.3, 2.4_
+
+- [x] 5. Implement API layer
+  - [x] 5.1 Implement halloween-api.lisp endpoint handlers
+    - Implement monster-diagnostic endpoint to parse form data, validate inputs, call LLM service, and return HTML response
+    - Implement story-generator endpoint with style parameter handling
+    - Implement character-chat endpoint with character persona selection
+    - Implement trivia-bot endpoint with conversation context
+    - Implement spell-generator endpoint for on-demand spell generation
+    - _Requirements: 3.1, 3.2, 4.1, 4.2, 5.1, 5.2, 6.1, 7.1_
+  - [x] 5.2 Integrate API endpoints into main.lisp
+    - Mount halloween-api routes under /api prefix
+    - Ensure proper middleware stack
+    - _Requirements: 8.1, 8.2_
+  - [x] 5.3 Write unit tests for API endpoints
+    - Test each endpoint with valid requests
+    - Test each endpoint with invalid requests
+    - Test error handling with mocked service failures
+    - _Requirements: 3.1, 4.1, 5.1, 6.1, 7.1_
+
+- [x] 6. Implement frontend with TailwindCSS and DaisyUI
+  - [x] 6.1 Create main HTML structure in public/index.html
+    - Replace existing HTML with complete structure including TailwindCSS and DaisyUI via CDN
+    - Include HTMX library via CDN
+    - Set up dark mode theme with Halloween colors (orange, purple, black)
+    - Create language selector toggle (Japanese/English) in header
+    - Create feature mode navigation using DaisyUI tabs component
+    - Create dynamic content container for feature components
+    - _Requirements: 2.1, 8.1, 8.2_
+  - [x] 6.2 Implement Monster Diagnostic component
+    - Create form with input fields (favorite food, sleep schedule, etc.) using DaisyUI form components
+    - Add HTMX attributes (hx-post, hx-target, hx-swap) for POST to /api/monster-diagnostic
+    - Create result display area with DaisyUI card for monster diagnosis
+    - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
+  - [x] 6.3 Implement Story Generator component
+    - Create form with input fields (name, theme) and style selector (gothic/parody/classic)
+    - Add HTMX attributes for POST to /api/story-generator
+    - Create story display area with DaisyUI card and prose styling
+    - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5_
+  - [x] 6.4 Implement Character Chat component
+    - Create character selector with DaisyUI radio buttons or tabs (Dracula, Witch, Jack-o'-Lantern)
+    - Create chat interface with DaisyUI chat bubbles for messages
+    - Add HTMX attributes for POST to /api/character-chat
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
+  - [x] 6.5 Implement Trivia Bot component
+    - Create conversation interface with DaisyUI textarea for user input
+    - Add HTMX attributes for POST to /api/trivia-bot
+    - Create response display with highlighted trivia facts using DaisyUI badge or alert
+    - _Requirements: 6.1, 6.2, 6.3, 6.4, 6.5_
+  - [x] 6.6 Implement Spell Generator component
+    - Create spell display with DaisyUI card showing spell phrase and explanation
+    - Add HTMX attributes for POST to /api/spell-generator with hx-trigger="load" for initial load
+    - Add regenerate button with HTMX attributes to request new spell
+    - Style spell phrase prominently with custom typography
+    - Show loading indicator during regeneration
+    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
+  - [x] 6.7 Add loading indicators and error displays
+    - Implement DaisyUI loading spinner with htmx:indicator class for HTMX requests
+    - Style error messages with DaisyUI alert component (alert-error class)
+    - _Requirements: 8.3, 8.4_
+  - [x] 6.8 Create custom-styles.css for Halloween theme overrides
+    - Define custom CSS color variables for Halloween theme (--halloween-orange, --halloween-purple)
+    - Add any additional styling not covered by DaisyUI
+    - Link stylesheet in index.html
+    - _Requirements: 8.4_
+
+- [x] 7. Implement language switching functionality
+  - [x] 7.1 Wire up language toggle to update UI text
+    - Add JavaScript to handle language toggle click events
+    - Use HTMX or vanilla JS to swap text content for all UI elements
+    - Store language preference in localStorage
+    - Update data-lang attribute on html element
+    - _Requirements: 2.1, 2.2_
+  - [x] 7.2 Ensure all API calls include language parameter
+    - Add hidden input field or hx-vals attribute to include current language in HTMX requests
+    - Update all forms to include language parameter
+    - _Requirements: 2.3, 2.4_
+  - [x] 7.3 Implement browser language detection on first load
+    - Add JavaScript to read navigator.language on page load
+    - Set initial language based on detection (ja for Japanese, en otherwise)
+    - Apply initial language to UI
+    - _Requirements: 2.5_
+
+- [x] 8. Integration and polish
+  - [x] 8.1 Manual end-to-end testing
+    - Test each feature mode with valid inputs
+    - Test language switching across all features
+    - Test error handling by stopping LLM service
+    - Verify all validation messages display correctly
+    - _Requirements: All requirements_
+  - [x] 8.2 Optimize LLM prompts based on testing results
+    - Refine prompts to produce better quality responses
+    - Adjust max tokens and temperature parameters as needed
+    - Test with different input variations
+    - _Requirements: 1.1, 3.2, 4.3, 5.3, 6.2, 7.2_
+  - [x] 8.3 Add responsive design improvements
+    - Test layout on mobile viewport sizes
+    - Adjust DaisyUI breakpoints and spacing for small screens
+    - Ensure all interactive elements are touch-friendly
+    - _Requirements: 8.1, 8.2, 8.3_
+  - [x] 8.4 Write E2E tests with Playwright
+    - Create test scenarios for each feature mode
+    - Test language switching functionality
+    - Test error handling scenarios
+    - _Requirements: All requirements_
+
+- [x] 9. Update Spell Generator feature to support on-demand regeneration
+  - [x] 9.1 Update backend API endpoint
+    - Change daily-spell endpoint from GET to POST at /api/spell-generator
+    - Remove date-based caching logic
+    - Update prompt builder to remove date-specific instructions
+    - Ensure each request generates a new unique spell
+    - _Requirements: 7.1, 7.2, 7.4, 7.5_
+  - [x] 9.2 Update frontend Spell Generator component
+    - Change HTMX request from GET to POST
+    - Add regenerate button with DaisyUI button styling
+    - Wire regenerate button to trigger new POST request to /api/spell-generator
+    - Add loading indicator during regeneration
+    - Remove date display from UI
+    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
+  - [x] 9.3 Update language handler UI text
+    - Update Japanese and English text for spell generator feature
+    - Add text for regenerate button in both languages
+    - Update feature title from "Daily Spell" to "Spell Generator"
+    - _Requirements: 2.1, 2.2, 7.1_
+  - [x] 9.4 Update E2E tests for spell generator
+    - Rename daily-spell.spec.js to spell-generator.spec.js
+    - Update test to verify regenerate button functionality
+    - Test that clicking regenerate produces different spell content
+    - Test loading indicator appears during regeneration
+    - _Requirements: 7.4, 7.5, 7.6_
+  - [x] 9.5 Update unit tests for spell generator
+    - Update prompt builder tests to remove date parameter
+    - Update API endpoint tests to use POST instead of GET
+    - Test that multiple calls produce different prompts
+    - _Requirements: 7.1, 7.2_

@@ -1,0 +1,71 @@
+# Implementation Plan
+
+- [x] 1. Implement prompt builder for monster diagnostic
+  - [x] 1.1 Add build-monster-diagnostic-prompt function to prompt-builder.lisp
+    - Include personality analysis instructions
+    - Format user inputs (favorite food, sleep schedule, hobbies)
+    - Add language-specific instructions
+    - Maintain Halloween theme context
+    - _Requirements: 1.2, 1.4_
+  - [x] 1.2 Write unit tests for prompt builder
+    - Test with various input combinations
+    - Test Japanese and English language outputs
+    - Verify Halloween theme context is included
+    - _Requirements: 1.2_
+
+- [x] 2. Implement API endpoint
+  - [x] 2.1 Add monster-diagnostic endpoint to halloween-api.lisp
+    - Parse form data from request
+    - Validate inputs (favorite_food, sleep_schedule, hobbies, language)
+    - Call prompt builder
+    - Call LLM service
+    - Format response as HTML
+    - Handle errors
+    - _Requirements: 1.1, 1.2, 1.3_
+  - [x] 2.2 Write unit tests for API endpoint
+    - Test with valid requests
+    - Test with invalid/missing parameters
+    - Test error handling with mocked service failures
+    - _Requirements: 1.1, 1.2_
+
+- [x] 3. Implement frontend component
+  - [x] 3.1 Create Monster Diagnostic component in index.html
+    - Create form with DaisyUI input fields
+    - Add favorite food input field
+    - Add sleep schedule input field
+    - Add hobbies textarea
+    - Add submit button with Halloween styling
+    - _Requirements: 1.1_
+  - [x] 3.2 Wire up HTMX attributes
+    - Add hx-post="/api/monster-diagnostic"
+    - Add hx-target for result display
+    - Add hx-swap="innerHTML"
+    - Add hx-indicator for loading state
+    - Include language parameter in request
+    - _Requirements: 1.1, 1.2_
+  - [x] 3.3 Create result display area
+    - Use DaisyUI card component
+    - Style for dark mode with Halloween colors
+    - Format monster type prominently
+    - Display personality description
+    - _Requirements: 1.3_
+
+- [x] 4. Testing and refinement
+  - [x] 4.1 Manual testing
+    - Test with various personality inputs
+    - Test in Japanese and English
+    - Verify monster types are appropriate
+    - Check response quality
+    - _Requirements: 1.1, 1.2, 1.3, 1.4_
+  - [x] 4.2 Write E2E tests
+    - Create monster-diagnostic.spec.js
+    - Test complete flow from form to result
+    - Test language switching
+    - Test error handling
+    - Test input validation
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 4.3 Optimize prompts based on testing
+    - Refine prompt for better monster type selection
+    - Adjust tone and style
+    - Improve personality description quality
+    - _Requirements: 1.3, 1.4_

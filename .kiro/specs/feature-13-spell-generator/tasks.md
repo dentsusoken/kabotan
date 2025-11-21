@@ -1,0 +1,102 @@
+# Implementation Plan
+
+- [x] 1. Implement prompt builder for spell generator
+  - [x] 1.1 Add build-spell-generator-prompt function to prompt-builder.lisp
+    - Include mystical spell creator instructions
+    - Specify output format (phrase + explanation)
+    - Define spell characteristics (Halloween-themed, mystical)
+    - Add language-specific instructions
+    - Ensure variety in spell types
+    - _Requirements: 1.1, 1.2, 1.3_
+  - [x] 1.2 Write unit tests for prompt builder
+    - Test prompt structure
+    - Test Japanese and English language outputs
+    - Verify spell generation instructions are clear
+    - _Requirements: 1.1, 1.2_
+
+- [x] 2. Implement API endpoint
+  - [x] 2.1 Add spell-generator endpoint to halloween-api.lisp
+    - Parse request parameters (language only)
+    - Call prompt builder
+    - Call LLM service
+    - Format response with spell phrase and explanation
+    - Include regenerate button in HTML response
+    - Handle errors
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
+  - [x] 2.2 Write unit tests for API endpoint
+    - Test with valid language parameters
+    - Test response includes phrase and explanation
+    - Test response includes regenerate button
+    - Test error handling
+    - _Requirements: 1.1, 1.2, 1.3, 1.4_
+
+- [x] 3. Implement frontend component
+  - [x] 3.1 Create Spell Generator component in index.html
+    - Create spell display area with DaisyUI card
+    - Style spell phrase prominently (large, decorative)
+    - Style explanation text
+    - Add regenerate button
+    - _Requirements: 1.2, 1.3, 1.4_
+  - [x] 3.2 Wire up HTMX attributes for initial load
+    - Add hx-post="/api/spell-generator"
+    - Add hx-trigger="load" for automatic initial load
+    - Add hx-target="#spell-area"
+    - Add hx-swap="innerHTML"
+    - Include language parameter in request
+    - _Requirements: 1.1, 1.2_
+  - [x] 3.3 Wire up regenerate button
+    - Add hx-post="/api/spell-generator" to button
+    - Add hx-target="#spell-area"
+    - Add hx-swap="innerHTML"
+    - Add hx-indicator for loading state
+    - _Requirements: 1.4, 1.5_
+  - [x] 3.4 Style spell display
+    - Use Halloween-themed colors (orange, purple)
+    - Apply dark mode styling
+    - Make phrase visually striking
+    - Ensure readability of explanation
+    - _Requirements: 1.2, 1.3_
+
+- [x] 4. Testing and refinement
+  - [x] 4.1 Manual testing
+    - Test initial spell load
+    - Test regenerate button multiple times
+    - Verify spells are different on each regeneration
+    - Test in Japanese and English
+    - Check spell quality and variety
+    - Verify loading indicator works
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
+  - [x] 4.2 Write E2E tests
+    - Create spell-generator.spec.js
+    - Test initial load
+    - Test regeneration functionality
+    - Test multiple regenerations produce different content
+    - Test language switching
+    - Test loading indicator
+    - Test error handling
+    - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6_
+  - [x] 4.3 Optimize prompts based on testing
+    - Refine spell generation instructions
+    - Improve spell variety
+    - Adjust mystical tone
+    - Ensure explanations are clear
+    - _Requirements: 1.2, 1.3_
+
+- [x] 5. Fix language-specific prompt generation
+  - [x] 5.1 Refactor build-spell-generator-prompt function
+    - Create separate prompt templates for Japanese and English
+    - For Japanese: Write entire prompt in Japanese to avoid translation behavior
+    - For English: Keep prompt in English with clear instructions
+    - Remove mixed-language instructions that cause translation artifacts
+    - Ensure LLM generates content directly in target language
+    - _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5_
+  - [x] 5.2 Test language-specific generation
+    - Verify Japanese spells contain no English text
+    - Verify English spells contain no Japanese text
+    - Check that spells feel naturally composed in target language
+    - Test multiple regenerations in each language
+    - _Requirements: 2.1, 2.2, 2.5_
+  - [x] 5.3 Update E2E tests if needed
+    - Verify tests check for language purity
+    - Add assertions to detect mixed-language content
+    - _Requirements: 2.1, 2.2, 2.4_

@@ -1,0 +1,34 @@
+# IDE
+.vscode/
+.idea/
+
+# Common Lisp
+*.fasl
+*.fas
+*.lib
+*.dx64fsl
+*.lx64fsl
+
+# Quicklisp
+quicklisp/
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Reference materials
+reference/

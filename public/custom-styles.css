@@ -1,0 +1,370 @@
+/* Halloween Theme Custom Styles */
+
+/* CSS Custom Properties for Halloween Theme */
+:root {
+    --halloween-orange: #ff6b35;
+    --halloween-purple: #8b5cf6;
+    --halloween-black: #1a1a1a;
+    --halloween-dark-purple: #6d28d9;
+    --halloween-light-orange: #ff8c61;
+    --halloween-glow: rgba(139, 92, 246, 0.3);
+}
+
+/* DaisyUI Halloween Theme Override */
+[data-theme="halloween"] {
+    --p: 262 80% 50%;        /* Primary color (purple) */
+    --s: 17 100% 60%;         /* Secondary color (orange) */
+    --a: 17 100% 60%;         /* Accent color (orange) */
+    --n: 0 0% 10%;            /* Neutral color (dark) */
+    --nc: 0 0% 100%;          /* Neutral content (white text) */
+    --b1: 0 0% 10%;           /* Base-100 (background) */
+    --b2: 0 0% 8%;            /* Base-200 (slightly darker) */
+    --b3: 0 0% 6%;            /* Base-300 (even darker) */
+    --bc: 0 0% 90%;           /* Base content (light text) */
+    --pc: 0 0% 100%;          /* Primary content (white) */
+    --sc: 0 0% 100%;          /* Secondary content (white) */
+    --ac: 0 0% 100%;          /* Accent content (white) */
+}
+
+/* Body Styling */
+body {
+    background-color: var(--halloween-black);
+    color: #e5e5e5;
+}
+
+/* Halloween Gradient Utility Class */
+.halloween-gradient {
+    background: linear-gradient(135deg, var(--halloween-purple) 0%, var(--halloween-orange) 100%);
+}
+
+/* HTMX Loading Indicator
+ * 
+ * These styles control the visibility of loading indicators during HTMX requests.
+ * 
+ * Usage:
+ * 1. Add class "htmx-indicator" to the loading indicator element
+ * 2. Add hx-indicator="#indicator-id" attribute to the form or button
+ * 3. The indicator will automatically show during requests and hide when complete
+ * 
+ * Example:
+ * <form hx-post="/api/endpoint" hx-indicator="#loading">
+ *   <button type="submit">Submit</button>
+ *   <span id="loading" class="htmx-indicator">Loading...</span>
+ * </form>
+ */
+.htmx-indicator {
+    display: none;
+}
+
+.htmx-request .htmx-indicator {
+    display: inline-block;
+}
+
+/* Daily Spell Styling */
+.spell-phrase {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    background: linear-gradient(135deg, var(--halloween-purple) 0%, var(--halloween-orange) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-align: center;
+    margin: 1.5rem 0;
+    font-family: 'Georgia', serif;
+    letter-spacing: 0.02em;
+}
+
+.spell-date {
+    font-size: 0.875rem;
+    opacity: 0.7;
+    text-align: center;
+}
+
+.spell-explanation {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Card Hover Effects */
+.card:hover {
+    box-shadow: 0 0 20px var(--halloween-glow);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Button Hover Effects */
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--halloween-glow);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Tab Active State Enhancement */
+.tab-active {
+    background: linear-gradient(135deg, var(--halloween-purple) 0%, var(--halloween-orange) 100%);
+    color: white;
+    font-weight: 600;
+}
+
+/* Chat Bubble Styling */
+.chat-bubble {
+    max-width: 80%;
+}
+
+.chat-bubble-primary {
+    background: linear-gradient(135deg, var(--halloween-dark-purple) 0%, var(--halloween-purple) 100%) !important;
+    color: white !important;
+}
+
+.chat-bubble-secondary {
+    background: linear-gradient(135deg, var(--halloween-purple) 0%, var(--halloween-dark-purple) 100%) !important;
+    color: white !important;
+}
+
+.chat-bubble-accent {
+    background: linear-gradient(135deg, var(--halloween-orange) 0%, var(--halloween-light-orange) 100%) !important;
+    color: white !important;
+}
+
+/* Trivia Badge Styling */
+.badge-trivia {
+    background: linear-gradient(135deg, var(--halloween-orange) 0%, var(--halloween-light-orange) 100%);
+    color: var(--halloween-black);
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+}
+
+/* Form Input Focus States */
+.input:focus,
+.textarea:focus {
+    border-color: var(--halloween-purple);
+    box-shadow: 0 0 0 2px var(--halloween-glow);
+    outline: none;
+}
+
+/* Radio Button Styling for Dark Theme */
+.radio {
+    border-width: 2px !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    background-color: transparent !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+}
+
+.radio:checked {
+    border-color: var(--halloween-purple) !important;
+    background-color: var(--halloween-purple) !important;
+    background-image: radial-gradient(circle, white 40%, transparent 50%) !important;
+}
+
+.radio:hover {
+    border-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.radio:focus {
+    outline: 2px solid var(--halloween-purple) !important;
+    outline-offset: 2px !important;
+}
+
+.radio-primary:checked {
+    border-color: var(--halloween-purple) !important;
+    background-color: var(--halloween-purple) !important;
+}
+
+/* Loading Spinner Color */
+.loading-spinner {
+    color: var(--halloween-orange);
+}
+
+/* Alert Error Styling */
+.alert-error {
+    background-color: rgba(220, 38, 38, 0.2);
+    border: 1px solid rgba(220, 38, 38, 0.5);
+}
+
+/* Scrollbar Styling for Chat/Trivia Containers */
+#chat-messages::-webkit-scrollbar,
+#trivia-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-messages::-webkit-scrollbar-track,
+#trivia-messages::-webkit-scrollbar-track {
+    background: var(--halloween-black);
+    border-radius: 4px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb,
+#trivia-messages::-webkit-scrollbar-thumb {
+    background: var(--halloween-purple);
+    border-radius: 4px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover,
+#trivia-messages::-webkit-scrollbar-thumb:hover {
+    background: var(--halloween-orange);
+}
+
+/* Responsive Typography and Layout */
+@media (max-width: 768px) {
+    .spell-phrase {
+        font-size: 1.5rem;
+        padding: 0 1rem;
+    }
+    
+    .card-title {
+        font-size: 1.5rem;
+    }
+    
+    /* Ensure touch-friendly spacing */
+    .form-control {
+        margin-bottom: 1rem;
+    }
+    
+    /* Better button spacing on mobile */
+    .btn {
+        min-height: 3rem;
+        font-size: 1rem;
+    }
+    
+    /* Improve readability on small screens */
+    .text-base-content\/70 {
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* Chat bubbles - better sizing on mobile */
+    .chat-bubble {
+        max-width: 85%;
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Badge sizing for trivia */
+    .badge-trivia {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Extra small devices - additional adjustments */
+@media (max-width: 480px) {
+    .spell-phrase {
+        font-size: 1.25rem;
+        padding: 0 0.5rem;
+    }
+    
+    .card-title {
+        font-size: 1.25rem;
+    }
+    
+    .btn {
+        font-size: 0.875rem;
+        padding: 0.625rem 1rem;
+    }
+    
+    .chat-bubble {
+        max-width: 90%;
+        font-size: 0.85rem;
+    }
+    
+    /* Compact form labels */
+    .label-text {
+        font-size: 0.875rem;
+    }
+}
+
+/* Animation for Feature Content Loading */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#feature-content {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Glow Effect for Active Elements */
+.glow-effect {
+    box-shadow: 0 0 15px var(--halloween-glow);
+}
+
+/* Header Styling Enhancement */
+.navbar {
+    border-bottom: 2px solid var(--halloween-purple);
+}
+
+/* Footer Styling */
+.footer {
+    border-top: 2px solid var(--halloween-purple);
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Increase tap target sizes on touch devices */
+    .btn,
+    .input,
+    .textarea,
+    .radio,
+    .tab {
+        -webkit-tap-highlight-color: rgba(139, 92, 246, 0.3);
+    }
+    
+    /* Prevent text selection on interactive elements */
+    .tab,
+    .btn,
+    .label.cursor-pointer {
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    
+    /* Smooth scrolling for touch */
+    #chat-messages,
+    #trivia-messages,
+    .tabs-boxed {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* Horizontal scroll indicator for tabs on mobile */
+@media (max-width: 768px) {
+    .tabs-boxed {
+        position: relative;
+    }
+    
+    .tabs-boxed::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 2rem;
+        background: linear-gradient(to left, var(--halloween-black), transparent);
+        pointer-events: none;
+    }
+}
+
+/* Improve form field visibility on mobile */
+@media (max-width: 768px) {
+    .input:focus,
+    .textarea:focus {
+        transform: scale(1.01);
+        transition: transform 0.2s ease;
+    }
+    
+    /* Ensure adequate spacing between form elements */
+    .form-control + .form-control {
+        margin-top: 1rem;
+    }
+}
